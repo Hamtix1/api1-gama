@@ -36,7 +36,6 @@ function capitalizeFirstLetter(string) {
         }
         return response.json();
     }).then(products => {
-        console.log(products.results)
         let categoriasSet = new Set()
         let colorSet = new Set()
         //Extraer los sets de los productos
@@ -195,6 +194,7 @@ function showProducts(products,initial_product,end_product) {
     for (let i = 0; i < productCards.length; i++) {
         //Agrega un evento click a cada elemento
         productCards[i].addEventListener("click", function (event) {
+            event.preventDefault();
             //Mostrar el Pop Up
             showPopup();
 
@@ -298,7 +298,11 @@ async function printProduct(prodImp) {
         let colorProduct = document.createElement('a')
         colorProduct.classList.add('popup_product_colors')
         colorProduct.id = 'p'+hijo.codigo
-        colorProduct.style.backgroundColor = colorProd.codigo
+        if(colorProd){
+            colorProduct.style.backgroundColor = colorProd.codigo
+        }else{
+            colorProduct.style.backgroundColor = "#fff"
+        }
         contentColors.appendChild(colorProduct)
     })
 
@@ -396,7 +400,6 @@ function addInformation(label, contenido, secondaryInformation) {
 }
 //Pintar Stock en Pop-UP
 function printStock(prodImp) {
-    console.log(prodImp)
     let productColors = document.getElementsByClassName("popup_product_colors");
     for (let i = 0; i < productColors.length; i++) {
         productColors[i].addEventListener('click', async function (event) {
@@ -407,8 +410,8 @@ function printStock(prodImp) {
             if (prodImp.materiales.status == 0) {
             } else {
                 stockDisponible = getStock(prodImp,idProducto)
-                if (stockDisponible.Stocks.length > 0) {
-                    stockDocument.innerHTML = stockDisponible.Stocks[0].Stock
+                if (stockDisponible != null) {
+                    stockDocument.innerHTML = stockDisponible
                 } else {
                     stockDocument.innerHTML = 0
                 }
@@ -417,11 +420,19 @@ function printStock(prodImp) {
     }
 }
 //Adquiere el stock
-async function getStock(prodImp,code) {
+function getStock(prodImp,code) {
     let filterStock = prodImp.materiales.filter(product => {
-        const matchesCode = !code || product.codigo.includes(code); 
+        let matchesCode = null
+        if(product.codigo){
+            matchesCode = !code || product.codigo.toString().includes(code);
+        }else{
+            matchesCode = null;
+        }
         return matchesCode       
-    });
-    console.log(filterStock)
-    return filterStock.inventario_almacen[0].cantidad
+    });  
+    
+    if(filterStock[0]){
+        return filterStock[0].inventario_almacen[0].cantidad
+    }
+    return null
 }
