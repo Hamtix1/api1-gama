@@ -253,6 +253,7 @@ body {
 
 .popup_product_price {
     text-align: left;
+    font-weight: 200;
     font-size: 30px;
     color: #333;
     margin-top: 0px;
@@ -295,7 +296,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
     margin-right: 20px;
     margin-left: 20px;
     padding: 10px;
@@ -312,6 +313,7 @@ body {
 }
 .popup_descripcion_info{
     text-align: left;
+    font-weight: 400;
     width: 100%;
 }
 
